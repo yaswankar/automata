@@ -45,7 +45,7 @@ export default {
     //Computed
     const pathStyle = computed(() => {
       return {
-        stroke: '#1FCD93',
+        stroke: '#716AF5',
         strokeWidth: 2.73205,
         fill: 'none',
       }
@@ -53,7 +53,7 @@ export default {
 
     const arrowStyle = computed(() => {
       return {
-        stroke: '#1FCD93',
+        stroke: '#716AF5',
         strokeWidth: 5.73205,
         fill: 'none',
       }

@@ -1,31 +1,38 @@
 <template>
-  <div>
-    <h1>Workflow Design</h1>
-    <div class="tool-wrapper">
-      <select v-model="newNodeType">
-        <option v-for="(item, index) in nodeCategory" :key="index" :value="index">{{item}}</option>
-      </select>
-      <input type="text" v-model="newNodeLabel" placeholder="Input node label">
-      <button @click="addNode">ADD</button>
+  <div class="design-view">
+    <div class="workflow-section">
+      <div class="text-xl font-bold underline">Workflow Design</div>
+      <div class="tool-wrapper">
+        <select v-model="newNodeType">
+          <option v-for="(item, index) in nodeCategory" :key="index" :value="index">{{item}}</option>
+        </select>
+        <input type="text" v-model="newNodeLabel" placeholder="Input node label">
+        <button @click="addNode">ADD</button>
+      </div>
+      
+      <workflow :scene="scene" 
+        @nodeClick="nodeClick"
+        @nodeDelete="nodeDelete"
+        @linkBreak="linkBreak"
+        @linkAdded="linkAdded"
+        @canvasClick="canvasClick"
+        :height="800"/>
     </div>
-    
-    <workflow :scene="scene" 
-      @nodeClick="nodeClick"
-      @nodeDelete="nodeDelete"
-      @linkBreak="linkBreak"
-      @linkAdded="linkAdded"
-      @canvasClick="canvasClick"
-      :height="800"/>
+    <div class="sidepane">
+      <sidebar />
+    </div>
   </div>
 </template>
 
 <script>
 import {ref} from 'vue';
 import Workflow from '../components/Workflow.vue'
+import Sidebar from '../components/Sidebar.vue'
 export default {
   name: 'app',
   components: {
-    Workflow
+    Workflow,
+    Sidebar
   },
   setup() {
     const scene = ref({
@@ -33,45 +40,19 @@ export default {
         centerY: 140,
         scale: 1,
         nodes: [
-          {
-            id: 2,
-            x: -700,
-            y: -69,
-            type: 'Action',
-            label: 'test1',
-          },
-          {
-            id: 4,
-            x: -357,
-            y: 80,
-            type: 'Script',
-            label: 'test2',
-          },
-          {
-            id: 6,
-            x: -557,
-            y: 80,
-            type: 'Rule',
-            label: 'test3',
-          }
         ],
         links: [
-          {
-            id: 3,
-            from: 2, // node id the link start
-            to: 4,  // node id the link end
-          }
         ]
       });
       const newNodeType = ref(0);
       const newNodeLabel = ref('');
       const nodeCategory = ref([
-        'rule',
+        'start',
         'action',
         'script',
-        'decision',
-        'fork',
-        'join',
+        'service',
+        'trigger',
+        'stop',
       ]);
 
       //Methods
@@ -120,7 +101,17 @@ export default {
 </script>
 
 <style lang="scss">
-  .tool-wrapper {
-    position: relative;
+.design-view {
+  display: flex;
+  width: 100%;
+  .workflow-section {
+    width: calc(100% - 300px);
+      .tool-wrapper {
+      position: relative;
+    }
   }
+  .sidepane {
+    width: 300px;
+  }
+}
 </style>

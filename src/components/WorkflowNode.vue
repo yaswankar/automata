@@ -132,7 +132,7 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
-$themeColor: #18B979;
+$themeColor: #716AF5;
 $portSize: 12;
 .flowchart-node {
   margin: 0;
@@ -188,10 +188,10 @@ $portSize: 12;
     font-size: 9px;
     width: 14px;
     height: 16px;
-    color: #18B979;
+    color: #716AF5;
     cursor: pointer;
     background: white;
-    border: 1px solid #18B979;
+    border: 1px solid #716AF5;
     border-radius: 100px;
     text-align: center;
     &:hover{
