@@ -1,0 +1,37 @@
+# This is a basic workflow to help you get started with Actions
+
+name: CI
+
+# Controls when the workflow will run
+on:
+  # Triggers the workflow on push or pull request events but only for the master branch
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  build-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2
+      - name: Set-Up Node
+        uses: actions/setup-node@v1
+        with:
+          node-version: "14.x"
+      - name: INSTALLING DEPENDENCIES
+        run: npm install
+      - name: BUILDING APPLICATION
+        run: npm run build
+      - name: DEPLOYING TO GH-PAGES
+        uses: crazy-max/ghaction-github-pages@v2.5.0
+        with: 
+          target_branch: gh-pages
+          build_dir: dist
+        env:
+          GITHUB_TOKEN: ${{ secrets.ACTION_KEY }}
