@@ -1,7 +1,7 @@
 <template>
   <Header />
   <div class="design-view">
-    <div class="workflow-section">
+    <div class="workflow-section" :style="computeWidth">
       <div class="tool-wrapper mb-5 mt-5 px-3">
         <div class="flex flex-row">
           <Icon icon="carbon:play" @dblclick="addNode('start')" class="basis-1/5" width="50" height="50" />
@@ -19,14 +19,14 @@
         @canvasClick="canvasClick"
         :height="800"/>
     </div>
-    <div class="sidepane">
-      <sidebar />
+    <div class="sidepane" :style="computeSidebarWidth">
+      <sidebar @closeSidebar="toggleSidebar" />
     </div>
   </div>
 </template>
 
 <script>
-import {ref} from 'vue';
+import {ref, computed} from 'vue';
 import Workflow from '../components/Workflow.vue'
 import Sidebar from '../components/Sidebar.vue'
 import Header from '../components/Header.vue'
@@ -38,6 +38,7 @@ export default {
     Header
   },
   setup() {
+    const showSidebar = ref(false);
     const scene = ref({
         centerX: 1024,
         centerY: 140,
@@ -54,12 +55,24 @@ export default {
         'trigger',
         'stop',
       ]);
-
+      //Computed
+      const computeWidth = computed(() => {
+          if(showSidebar.value) {
+            return {
+              width: 'calc(100% - 400px)'
+            }
+          } else return { width: '100%'}
+      });
+      const computeSidebarWidth = computed(() => {
+        if(showSidebar.value) return { width: '400px'};
+        else return { width: 0 };
+      })
       //Methods
       function canvasClick(e) {
         console.log('canvas Click, event:', e)
       };
       function addNode(label) {
+        toggleSidebar();
         let maxID = Math.max(0, ...scene.value.nodes.map((link) => {
           return link.id
         }))
@@ -83,16 +96,24 @@ export default {
       function linkAdded(link) {
         console.log('new link added:', link);
       }
+      function toggleSidebar() {
+        console.log('triggered');
+        showSidebar.value = !showSidebar.value;
+      }
 
     return {
+      showSidebar,
       scene,
       nodeCategory,
+      computeWidth,
+      computeSidebarWidth,
       canvasClick,
       addNode,
       nodeClick,
       nodeDelete,
       linkBreak,
-      linkAdded
+      linkAdded,
+      toggleSidebar
     }
   },
 }
@@ -103,13 +124,13 @@ export default {
   display: flex;
   width: 100%;
   .workflow-section {
-    width: calc(100% - 300px);
+    // width: calc(100% - 400px);
       .tool-wrapper {
         position: relative;
     }
   }
   .sidepane {
-    width: 300px;
+    // width: 400px;
   }
 }
 </style>
