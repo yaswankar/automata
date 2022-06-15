@@ -1,18 +1,25 @@
 <template>
   <div class="sidebar-main p-0">
-    <Icon icon="ant-design:close-outlined" width="30" height="30" @click="closeSidebar"/>
+    <div>{{getLabel}}</div>
   </div>
 </template>
 
 <script>
+import {computed} from 'vue';
 export default {
     name: 'Sidebar',
     emits: ['closeSidebar'],
+    props: ['nodeData'],
     setup(props, ctx) {
+      const getLabel = computed(() => {
+        console.log(props?.nodeData?.label);
+        return props?.nodeData?.label || '';
+      })
       function closeSidebar() {
         ctx.emit('closeSidebar');
       }
       return {
+        getLabel,
         closeSidebar
       }
     }

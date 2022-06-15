@@ -3,6 +3,7 @@
     @mousedown="handleMousedown"
     @mouseover="handleMouseOver"
     @mouseleave="handleMouseLeave"
+    @dblclick="openInfoPane"
     v-bind:class="{selected: options.selected === id}">
     <div class="node-port node-input"
        @mousedown="inputMouseDown"
@@ -24,18 +25,8 @@ import {ref, computed} from 'vue';
 
 export default {
   name: 'WorkflowNode',
-  emits: ['nodeSelected', 'linkingStart', 'linkingStop'],
+  emits: ['nodeSelected', 'linkingStart', 'linkingStop', 'openInfoPane'],
   props: {
-    // node: {
-    //   type: Object,
-    //   default: {
-    //     id: 1000,
-    //     x: 0,
-    //     y: 0,
-    //     type: 'Default',
-    //     label: 'input name'
-    //   }
-    // },
     id: {
       type: Number,
       default: 1000,
@@ -115,6 +106,9 @@ export default {
       ctx.emit('linkingStop')
       e.preventDefault();
     };
+    function openInfoPane() {
+      ctx.emit('openInfoPane', props)
+    }
 
     return {
       show,
@@ -124,7 +118,8 @@ export default {
       handleMouseLeave,
       outputMouseDown,
       inputMouseDown,
-      inputMouseUp
+      inputMouseUp,
+      openInfoPane
     }
   },
 }

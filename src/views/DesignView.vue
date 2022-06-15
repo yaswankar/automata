@@ -17,10 +17,11 @@
         @linkBreak="linkBreak"
         @linkAdded="linkAdded"
         @canvasClick="canvasClick"
+        @openInfoPane="updateInfoPane"
         :height="800"/>
     </div>
     <div class="sidepane" :style="computeSidebarWidth">
-      <sidebar @closeSidebar="toggleSidebar" />
+      <sidebar :nodeData="nodeData" />
     </div>
   </div>
 </template>
@@ -38,7 +39,12 @@ export default {
     Header
   },
   setup() {
-    const showSidebar = ref(false);
+    const showSidebar = ref(true);
+    const nodeData = ref({
+      id: '',
+      label: '',
+      type: ''
+    });
     const scene = ref({
         centerX: 1024,
         centerY: 140,
@@ -72,7 +78,6 @@ export default {
         console.log('canvas Click, event:', e)
       };
       function addNode(label) {
-        toggleSidebar();
         let maxID = Math.max(0, ...scene.value.nodes.map((link) => {
           return link.id
         }))
@@ -85,24 +90,24 @@ export default {
         })
       };
       function nodeClick(id) {
-        console.log('node click', id);
+        // console.log('node click', id);
       };
       function nodeDelete(id) {
-        console.log('node delete', id);
+        // console.log('node delete', id);
       };
       function linkBreak(id) {
-        console.log('link break', id);
+        // console.log('link break', id);
       };
       function linkAdded(link) {
-        console.log('new link added:', link);
+        // console.log('new link added:', link);
       }
-      function toggleSidebar() {
-        console.log('triggered');
-        showSidebar.value = !showSidebar.value;
+      function updateInfoPane(node) {
+        nodeData.value = { ...node };
       }
 
     return {
       showSidebar,
+      nodeData,
       scene,
       nodeCategory,
       computeWidth,
@@ -113,7 +118,8 @@ export default {
       nodeDelete,
       linkBreak,
       linkAdded,
-      toggleSidebar
+      // toggleSidebar,
+      updateInfoPane
     }
   },
 }

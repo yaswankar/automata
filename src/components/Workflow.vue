@@ -14,6 +14,7 @@
     <workflow-node
       v-for="(node, index) in scene.nodes" 
       v-bind.sync="node"
+      v-bind="$attrs"
       :key="`node${index}`"
       :options="nodeOptions"
       @linkingStart="linkingStart(node.id)"
