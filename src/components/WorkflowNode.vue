@@ -3,7 +3,7 @@
     @mousedown="handleMousedown"
     @mouseover="handleMouseOver"
     @mouseleave="handleMouseLeave"
-    @dblclick="openInfoPane"
+    @click="openInfoPane"
     v-bind:class="{selected: options.selected === id}">
     <div class="node-port node-input"
        @mousedown="inputMouseDown"

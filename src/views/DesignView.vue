@@ -3,6 +3,7 @@
   <div class="design-view">
     <div class="workflow-section" :style="computeWidth">
       <div class="tool-wrapper mb-5 mt-5 px-3">
+        <div style="margin-bottom: 20px;"><i>Double click to add nodes</i></div>
         <div class="flex flex-row">
           <Icon icon="carbon:play" @dblclick="addNode('start')" class="basis-1/5" width="50" height="50" />
           <Icon icon="carbon:webhook" @dblclick="addNode('webhook')" class="basis-1/5" width="50" height="50" />
@@ -54,13 +55,13 @@ export default {
         links: [
         ]
       });
-      const nodeCategory = ref([
-        'start',
-        'webhook',
-        'service',
-        'trigger',
-        'stop',
-      ]);
+      const nodeCategory = ref({
+        start: 1,
+        webhook: 2,
+        service: 3,
+        trigger: 4,
+        stop: 5,
+      });
       //Computed
       const computeWidth = computed(() => {
           if(showSidebar.value) {
@@ -78,6 +79,24 @@ export default {
         console.log('canvas Click, event:', e)
       };
       function addNode(label) {
+        const excludes = ['start', 'stop'];
+        if(excludes.includes(label)) {
+          const startNode = scene.value.nodes.find(node => node.type === 'start');
+          const stopNode = scene.value.nodes.find(node => node.type === 'stop');
+          let errorFlag = false;
+          let error = '';
+          if(startNode && label === 'start') {
+            errorFlag = true;
+            error = 'start';
+          } else if(stopNode && label === 'stop') {
+            errorFlag = true;
+            error = 'stop';
+          }
+          if(errorFlag) {
+            window.alert(`Workflow already has a ${error} node`);
+            return;
+          }
+        }
         let maxID = Math.max(0, ...scene.value.nodes.map((link) => {
           return link.id
         }))
@@ -85,7 +104,7 @@ export default {
           id: maxID + 1,
           x: -400,
           y: 50,
-          type: nodeCategory.value[label],
+          type: label,
           label: `${label}${maxID + 1}`,
         })
       };
